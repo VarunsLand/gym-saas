@@ -7,8 +7,9 @@ class TaskService {
    * @param {string} tenantId - The UUID of the tenant
    * @param {string} filterType - 'TODAY', 'OVERDUE', or 'UPCOMING'
    * @param {string} [userId] - Optional: Filter tasks assigned to a specific user
+   * @param {string} [leadId] - Optional: Filter tasks for a specific lead
    */
-  static async getTasks(tenantId, filterType, userId = null) {
+  static async getTasks(tenantId, filterType, userId = null, leadId = null) {
     const now = new Date();
     
     // We create midnight boundaries to accurately split TODAY, OVERDUE, and UPCOMING.
@@ -47,6 +48,10 @@ class TaskService {
 
     if (userId) {
       whereClause.assigned_to = userId;
+    }
+    
+    if (leadId) {
+      whereClause.lead_id = leadId;
     }
 
     return prisma.followUpTask.findMany({

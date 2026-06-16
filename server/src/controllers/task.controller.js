@@ -19,7 +19,9 @@ const getTasks = catchAsync(async (req, res) => {
     targetUserId = req.user.user_id;
   }
 
-  const tasks = await TaskService.getTasks(tenantId, filterType, targetUserId);
+  const leadId = req.query.lead_id;
+
+  const tasks = await TaskService.getTasks(tenantId, filterType, targetUserId, leadId);
 
   res.status(200).json({
     status: 'success',
