@@ -4,12 +4,13 @@
   "description": "Production-ready Multi-tenant SaaS CRM Backend",
   "main": "src/server.js",
   "scripts": {
-    "postinstall": "npx prisma generate",
+    "postinstall": "node node_modules/prisma/build/index.js generate",
+    "build": "npx prisma generate",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "prisma:generate": "npx prisma generate",
-    "prisma:push": "prisma db push",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:push": "npx prisma db push",
+    "prisma:migrate": "npx prisma migrate dev"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
