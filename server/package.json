@@ -4,10 +4,10 @@
   "description": "Production-ready Multi-tenant SaaS CRM Backend",
   "main": "src/server.js",
   "scripts": {
-    "postinstall": "prisma generate",
+    "postinstall": "npx prisma generate",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "prisma:generate": "prisma generate",
+    "prisma:generate": "npx prisma generate",
     "prisma:push": "prisma db push",
     "prisma:migrate": "prisma migrate dev"
   },
@@ -21,11 +21,11 @@
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "prisma": "^5.22.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7",
-    "prisma": "^5.22.0"
+    "nodemon": "^3.1.7"
   },
   "engines": {
     "node": ">=18.0.0"
