@@ -25,5 +25,10 @@ export const leadsService = {
   async updateLead(id: string, data: Partial<CreateLeadPayload>): Promise<LeadResponse> {
     const response = await api.patch(`/leads/${id}`, data);
     return response.data;
+  },
+
+  async importLeads(data: { leads: CreateLeadPayload[] }): Promise<{ status: string; data: { importedCount: number; skippedCount: number } }> {
+    const response = await api.post('/leads/import', data);
+    return response.data;
   }
 };

@@ -110,6 +110,50 @@ class LeadService {
       data
     });
   }
+
+  /**
+   * Bulk import leads, skipping duplicates by phone number.
+   * @param {string} tenantId - The UUID of the tenant
+   * @param {Array} leadsData - Array of validated lead payloads
+   */
+  static async importLeads(tenantId, leadsData) {
+    let importedCount = 0;
+    let skippedCount = 0;
+
+    const existingPhones = await prisma.lead.findMany({
+      where: {
+        tenant_id: tenantId,
+        phone_number: { in: leadsData.map(l => l.phone_number) },
+        deleted_at: null
+      },
+      select: { phone_number: true }
+    }).then(leads => new Set(leads.map(l => l.phone_number)));
+
+    const leadsToInsert = [];
+
+    for (const lead of leadsData) {
+      if (existingPhones.has(lead.phone_number)) {
+        skippedCount++;
+      } else {
+        leadsToInsert.push({
+          ...lead,
+          tenant_id: tenantId
+        });
+        // Prevent duplicates within the CSV itself
+        existingPhones.add(lead.phone_number);
+        importedCount++;
+      }
+    }
+
+    if (leadsToInsert.length > 0) {
+      await prisma.lead.createMany({
+        data: leadsToInsert,
+        skipDuplicates: true
+      });
+    }
+
+    return { importedCount, skippedCount };
+  }
 }
 
 module.exports = LeadService;

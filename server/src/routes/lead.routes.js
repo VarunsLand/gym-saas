@@ -1,7 +1,7 @@
 const express = require('express');
 const leadController = require('../controllers/lead.controller');
 const taskController = require('../controllers/task.controller');
-const { createLeadSchema, updateLeadSchema } = require('../validations/lead.validation');
+const { createLeadSchema, updateLeadSchema, importLeadsSchema } = require('../validations/lead.validation');
 const { createTaskSchema } = require('../validations/task.validation');
 const validate = require('../middlewares/validate.middleware');
 const { requireAuth } = require('../middlewares/auth.middleware');
@@ -17,6 +17,17 @@ router.use(requireAuth);
  * @access  Private
  */
 router.get('/', leadController.getLeads);
+
+/**
+ * @route   POST /api/v1/leads/import
+ * @desc    Bulk import leads
+ * @access  Private
+ */
+router.post(
+  '/import',
+  validate(importLeadsSchema),
+  leadController.importLeads
+);
 
 /**
  * @route   GET /api/v1/leads/:id

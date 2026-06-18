@@ -71,7 +71,23 @@ const updateLeadSchema = z.object({
   }).strict() // Disallows undocumented fields in the payload
 });
 
+const importLeadsSchema = z.object({
+  body: z.object({
+    leads: z.array(
+      z.object({
+        first_name: z.string().min(1).max(100),
+        last_name: z.string().max(100).optional().nullable(),
+        phone_number: z.string().min(5).max(50),
+        email: z.string().email().max(255).optional().nullable().or(z.literal('')),
+        status: LeadStatusEnum.optional(),
+        description: z.string().max(5000).optional().nullable()
+      })
+    ).min(1, 'At least one lead is required').max(1000, 'Cannot import more than 1000 leads at once')
+  })
+});
+
 module.exports = {
   createLeadSchema,
-  updateLeadSchema
+  updateLeadSchema,
+  importLeadsSchema
 };

@@ -69,9 +69,27 @@ const updateLead = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * @desc    Import bulk leads
+ * @route   POST /api/v1/leads/import
+ * @access  Private
+ */
+const importLeads = catchAsync(async (req, res) => {
+  const tenantId = req.user.tenant_id;
+  const { leads } = req.body;
+
+  const result = await LeadService.importLeads(tenantId, leads);
+
+  res.status(200).json({
+    status: 'success',
+    data: result
+  });
+});
+
 module.exports = {
   getLeads,
   getLeadById,
   createLead,
-  updateLead
+  updateLead,
+  importLeads
 };

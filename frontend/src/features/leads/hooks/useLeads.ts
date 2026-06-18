@@ -136,3 +136,21 @@ export const useUpdateLead = () => {
     }
   });
 };
+
+export const useImportLeads = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { leads: CreateLeadPayload[] }) => leadsService.importLeads(data),
+    onSuccess: (response) => {
+      toast.success(`Imported ${response.data.importedCount} leads. Skipped ${response.data.skippedCount} duplicates.`);
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboardMetrics'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboardActivity'] });
+    },
+    onError: (error: ApiError) => {
+      const message = error.response?.data?.message || 'Failed to import leads';
+      toast.error(message);
+    },
+  });
+};

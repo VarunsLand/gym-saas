@@ -2,6 +2,7 @@
 
 import { LeadList } from '@/features/leads/components/LeadList';
 import { CreateLeadDialog } from '@/features/leads/components/CreateLeadDialog';
+import { ImportLeadsDialog } from '@/features/leads/components/ImportLeadsDialog';
 
 export default function LeadsPage() {
   return (
@@ -16,7 +17,10 @@ export default function LeadsPage() {
               View, search, and manage your sales pipeline.
             </p>
           </div>
-          <CreateLeadDialog />
+          <div className="flex items-center gap-2">
+            <ImportLeadsDialog />
+            <CreateLeadDialog />
+          </div>
         </div>
 
         {/* Lead List Table */}
