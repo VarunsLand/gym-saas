@@ -22,6 +22,7 @@ import { WhatsAppButton } from '@/features/leads/components/WhatsAppButton';
 import { EmailButton } from '@/features/leads/components/EmailButton';
 import { LeadAvatar } from '@/features/leads/components/LeadAvatar';
 import { CopyButton } from '@/components/ui/copy-button';
+import { LeadDescriptionCard } from '@/features/leads/components/LeadDescriptionCard';
 
 export default function LeadDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -166,6 +167,9 @@ export default function LeadDetailsPage({ params }: { params: Promise<{ id: stri
                 </div>
               </CardContent>
             </Card>
+
+            {/* Description Card */}
+            <LeadDescriptionCard leadId={leadId} description={lead.description} />
           </div>
 
           {/* Right Column: Interactions & Tasks */}

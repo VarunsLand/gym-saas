@@ -27,6 +27,10 @@ const createLeadSchema = z.object({
     service: z.string()
       .max(255, 'Service string cannot exceed 255 characters')
       .optional()
+      .nullable(),
+    description: z.string()
+      .max(5000, 'Description cannot exceed 5000 characters')
+      .optional()
       .nullable()
   })
 });
@@ -58,6 +62,10 @@ const updateLeadSchema = z.object({
       .nullable(),
     service: z.string()
       .max(255, 'Service string cannot exceed 255 characters')
+      .optional()
+      .nullable(),
+    description: z.string()
+      .max(5000, 'Description cannot exceed 5000 characters')
       .optional()
       .nullable()
   }).strict() // Disallows undocumented fields in the payload

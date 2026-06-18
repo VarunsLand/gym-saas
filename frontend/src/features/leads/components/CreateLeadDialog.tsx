@@ -15,12 +15,14 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 const leadSchema = z.object({
   first_name: z.string().min(1, 'First name is required'),
   last_name: z.string().optional(),
   email: z.string().email('Invalid email address').optional().or(z.literal('')),
   phone_number: z.string().min(5, 'Phone number is required'),
+  description: z.string().max(5000, 'Description is too long').optional().or(z.literal('')),
 });
 
 type LeadFormValues = z.infer<typeof leadSchema>;
@@ -36,6 +38,7 @@ export function CreateLeadDialog() {
       last_name: '',
       email: '',
       phone_number: '',
+      description: '',
     },
   });
 
@@ -44,6 +47,7 @@ export function CreateLeadDialog() {
     const payload = {
       ...data,
       email: data.email === '' ? undefined : data.email,
+      description: data.description === '' ? undefined : data.description,
     };
     
     createLead(payload, {
@@ -83,6 +87,16 @@ export function CreateLeadDialog() {
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="jane@example.com" {...register('email')} />
             {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="description">Description / Notes</Label>
+            <Textarea 
+              id="description" 
+              placeholder="Add background context, requirements, or general notes about this lead..." 
+              className="resize-none min-h-[100px]"
+              {...register('description')} 
+            />
+            {errors.description && <p className="text-xs text-red-500">{errors.description.message}</p>}
           </div>
           <div className="flex justify-end pt-4">
             <Button type="submit" disabled={isPending}>

@@ -10,6 +10,7 @@ export interface Lead {
   phone_number: string;
   email?: string | null;
   service?: string | null;
+  description?: string | null;
   status: LeadStatus;
   created_at: string;
   updated_at: string;
@@ -35,6 +36,7 @@ export interface CreateLeadPayload {
   last_name?: string;
   email?: string;
   phone_number: string;
+  description?: string;
 }
 
 export interface UpdateLeadStatusPayload {

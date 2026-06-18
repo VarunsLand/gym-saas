@@ -115,3 +115,24 @@ export const useUpdateLeadStatus = () => {
     }
   });
 };
+
+export const useUpdateLead = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<CreateLeadPayload> }) => 
+      leadsService.updateLead(id, data),
+    
+    // Always refetch after error or success to ensure backend sync
+    onSettled: (data, error, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['lead', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+    },
+    onSuccess: () => {
+      toast.success('Lead updated successfully');
+    },
+    onError: () => {
+      toast.error('Failed to update lead');
+    }
+  });
+};
