@@ -50,8 +50,22 @@ const getCurrentUser = catchAsync(async (req, res) => {
   });
 });
 
+const forgotPassword = catchAsync(async (req, res) => {
+  const result = await AuthService.forgotPassword(req.body);
+  
+  res.status(200).json(result); // Contains status and message
+});
+
+const resetPassword = catchAsync(async (req, res) => {
+  const result = await AuthService.resetPassword(req.body);
+  
+  res.status(200).json(result); // Contains status and message
+});
+
 module.exports = {
   signup,
   login,
-  getCurrentUser
+  getCurrentUser,
+  forgotPassword,
+  resetPassword
 };

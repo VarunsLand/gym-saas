@@ -32,7 +32,28 @@ const loginSchema = z.object({
   })
 });
 
+const forgotPasswordSchema = z.object({
+  body: z.object({
+    email: z.string({ required_error: 'Email is required' })
+      .email('Invalid email address')
+  })
+});
+
+const resetPasswordSchema = z.object({
+  body: z.object({
+    token: z.string({ required_error: 'Token is required' })
+      .min(1, 'Token cannot be empty'),
+    new_password: z.string({ required_error: 'New password is required' })
+      .min(8, 'Password must be at least 8 characters')
+      .regex(/[a-zA-Z]/, 'Password must contain at least one letter')
+      .regex(/[0-9]/, 'Password must contain at least one number')
+      .max(128, 'Password cannot exceed 128 characters')
+  })
+});
+
 module.exports = {
   signupSchema,
-  loginSchema
+  loginSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema
 };

@@ -2,6 +2,8 @@ const prisma = require('../config/db');
 const { hashPassword, comparePassword } = require('../utils/passwordUtils');
 const { generateToken } = require('../utils/jwtUtils');
 const ApiError = require('../utils/ApiError');
+const crypto = require('crypto');
+const { emailService } = require('./email.service');
 
 class AuthService {
   /**
@@ -141,6 +143,86 @@ class AuthService {
 
     delete user.password_hash;
     return user;
+  }
+
+  /**
+   * Generates a password reset token and sends an email.
+   * Returns generic success regardless of email existence to prevent enumeration.
+   */
+  static async forgotPassword(payload) {
+    console.log("Forgot password called");
+    const { email } = payload;
+    
+    const user = await prisma.user.findFirst({
+      where: { email, deleted_at: null }
+    });
+    
+    console.log("User found:", !!user);
+
+    if (!user) {
+      // Do nothing, return standard success response
+      return { status: 'success', message: 'If an account with that email exists, a password reset link has been sent.' };
+    }
+
+    // Generate secure token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    // Set expiration to 60 minutes
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 60);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        reset_password_token: hashedToken,
+        reset_password_expires: expiresAt
+      }
+    });
+
+    // Create reset URL
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
+
+    // Send email
+    console.log("Attempting to send email...");
+    await emailService.sendPasswordResetEmail(user.email, resetUrl);
+    console.log("Email sent successfully");
+
+    return { status: 'success', message: 'If an account with that email exists, a password reset link has been sent.' };
+  }
+
+  /**
+   * Verifies the reset token and updates the user's password.
+   */
+  static async resetPassword(payload) {
+    const { token, new_password } = payload;
+
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await prisma.user.findFirst({
+      where: {
+        reset_password_token: hashedToken,
+        reset_password_expires: { gt: new Date() },
+        deleted_at: null
+      }
+    });
+
+    if (!user) {
+      throw new ApiError(400, 'Password reset token is invalid or has expired.');
+    }
+
+    const newHashedPassword = await hashPassword(new_password);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password_hash: newHashedPassword,
+        reset_password_token: null,
+        reset_password_expires: null
+      }
+    });
+
+    return { status: 'success', message: 'Password has been reset successfully.' };
   }
 }
 

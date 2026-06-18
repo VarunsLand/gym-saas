@@ -70,10 +70,12 @@ model User {
   first_name    String    @db.VarChar(100)
   last_name     String    @db.VarChar(100)
   role          UserRole  @default(STAFF)
-  last_login_at DateTime? @db.Timestamptz
-  created_at    DateTime  @default(now()) @db.Timestamptz
-  updated_at    DateTime  @updatedAt @db.Timestamptz
-  deleted_at    DateTime? @db.Timestamptz
+  last_login_at          DateTime? @db.Timestamptz
+  reset_password_token   String?   @db.VarChar(255)
+  reset_password_expires DateTime? @db.Timestamptz
+  created_at             DateTime  @default(now()) @db.Timestamptz
+  updated_at             DateTime  @updatedAt @db.Timestamptz
+  deleted_at             DateTime? @db.Timestamptz
 
   tenant         Tenant         @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
   assigned_leads Lead[]
