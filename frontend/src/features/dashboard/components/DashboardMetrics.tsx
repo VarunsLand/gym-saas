@@ -10,15 +10,15 @@ export function DashboardMetrics() {
 
   if (isLoading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {[1, 2, 3, 4].map((i) => (
-          <Card key={i} className="bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50">
+          <Card key={i} className="bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div className="h-4 w-24 bg-slate-200 dark:bg-slate-800 rounded animate-pulse" />
-              <div className="h-8 w-8 bg-slate-200 dark:bg-slate-800 rounded-full animate-pulse" />
+              <div className="h-4 w-24 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
+              <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 rounded-xl animate-pulse" />
             </CardHeader>
             <CardContent>
-              <div className="h-8 w-16 bg-slate-200 dark:bg-slate-800 rounded mt-1 animate-pulse" />
+              <div className="h-10 w-20 bg-slate-100 dark:bg-slate-800 rounded mt-2 animate-pulse" />
             </CardContent>
           </Card>
         ))}
@@ -78,19 +78,23 @@ export function DashboardMetrics() {
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {items.map((item) => (
-        <Card key={item.title} className="bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50 relative overflow-hidden group">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <Card 
+          key={item.title} 
+          className="bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-2xl relative overflow-hidden group cursor-pointer"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-950/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
             <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">
               {item.title}
             </CardTitle>
-            <div className={`p-2.5 rounded-xl ${item.bgColor} transition-transform group-hover:scale-110`}>
-              <item.icon className={`h-5 w-5 ${item.color}`} />
+            <div className={`p-2.5 rounded-xl ${item.bgColor} transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-sm`}>
+              <item.icon className={`h-5 w-5 ${item.color}`} strokeWidth={2.5} />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">{item.value}</div>
+          <CardContent className="relative z-10">
+            <div className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 mt-1">{item.value}</div>
           </CardContent>
         </Card>
       ))}
