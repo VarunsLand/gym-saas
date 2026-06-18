@@ -132,7 +132,7 @@ export function LeadList() {
   return (
     <Card className="shadow-sm border-slate-200/60 dark:border-slate-800/60">
       <CardContent className="p-0">
-        <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-900/20 rounded-t-2xl">
+        <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-col xl:flex-row xl:items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-900/20 rounded-t-2xl">
           <div className="flex items-center gap-1 overflow-x-auto pb-2 sm:pb-0 hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             {filters.map((filter) => {
               const isActive = statusFilter === filter.id;
@@ -161,12 +161,12 @@ export function LeadList() {
             })}
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto shrink-0 justify-end">
-            <div className="relative w-full sm:max-w-xs shrink-0">
+          <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto shrink-0 justify-end mt-4 sm:mt-0">
+            <div className="relative w-full md:w-[350px] shrink-0">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <Input
-                placeholder="Search leads..."
-                className="pl-9 h-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-indigo-500 rounded-full"
+                placeholder="Search leads by name, email, or phone..."
+                className="pl-9 h-9 w-full bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-indigo-500 rounded-full text-ellipsis"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -174,7 +174,7 @@ export function LeadList() {
             <Button
               variant="outline"
               size="sm"
-              className="h-9 rounded-full bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 shrink-0"
+              className="h-9 w-full md:w-auto rounded-full bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 shrink-0"
               onClick={handleExportCSV}
               disabled={filteredLeads.length === 0}
             >
