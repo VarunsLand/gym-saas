@@ -15,13 +15,16 @@ app.use(helmet());
 
 // 2. Enable Cross-Origin Resource Sharing with explicit origins
 const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS
-  ? process.env.CORS_ALLOWED_ORIGINS.split(',')
+  ? process.env.CORS_ALLOWED_ORIGINS.split(',').map(origin => origin.trim())
   : ['http://localhost:3000'];
 
-app.use(cors({
+const corsOptions = {
   origin: allowedOrigins,
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // 3. Rate limiting for authentication endpoints
 const authLimiter = rateLimit({
