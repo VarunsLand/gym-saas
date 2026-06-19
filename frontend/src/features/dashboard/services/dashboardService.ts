@@ -1,7 +1,7 @@
 import api from '@/services/api';
 
 export const dashboardService = {
-  async getAnalytics(startDate?: string, endDate?: string): Promise<any> {
+  async getAnalytics(startDate?: string, endDate?: string): Promise<unknown> {
     const params = new URLSearchParams();
     if (startDate) params.append('startDate', startDate);
     if (endDate) params.append('endDate', endDate);

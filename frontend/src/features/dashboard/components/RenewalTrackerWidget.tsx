@@ -10,10 +10,18 @@ import { Button } from '@/components/ui/button';
 import { RenewMembershipDialog } from './RenewMembershipDialog';
 
 export function RenewalTrackerWidget() {
-  const { data: leadsData, isLoading } = useLeads();
-  const leads = leadsData?.data?.leads || [];
+  interface RenewalLead {
+    id: string;
+    first_name: string;
+    last_name?: string | null;
+    expiry_date?: string | null;
+    service?: string | null;
+  }
 
-  const [selectedMember, setSelectedMember] = React.useState<any>(null);
+  const { data: leadsData, isLoading } = useLeads();
+  const leads: RenewalLead[] = leadsData?.data?.leads || [];
+
+  const [selectedMember, setSelectedMember] = React.useState<RenewalLead | null>(null);
   const [isRenewOpen, setIsRenewOpen] = React.useState(false);
 
   const today = new Date();
@@ -39,12 +47,12 @@ export function RenewalTrackerWidget() {
     return differenceInDays(expiry, today) < 0;
   }).sort((a, b) => new Date(b.expiry_date!).getTime() - new Date(a.expiry_date!).getTime());
 
-  const handleRenewClick = (member: any) => {
+  const handleRenewClick = (member: RenewalLead) => {
     setSelectedMember(member);
     setIsRenewOpen(true);
   };
 
-  const renderMemberList = (members: any[], emptyMessage: string) => {
+  const renderMemberList = (members: RenewalLead[], emptyMessage: string) => {
     if (isLoading) {
       return (
         <div className="space-y-3">

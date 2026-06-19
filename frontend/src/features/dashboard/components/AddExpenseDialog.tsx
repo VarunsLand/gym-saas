@@ -26,7 +26,7 @@ export function AddExpenseDialog() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: { category: string; amount: number; notes: string; date: string }) => {
       const response = await api.post('/expenses', data);
       return response.data;
     },
@@ -36,8 +36,9 @@ export function AddExpenseDialog() {
       setOpen(false);
       setCategory('RENT'); setAmount(''); setNotes(''); setDate(new Date().toISOString().split('T')[0]);
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to record expense');
+    onError: (error: unknown) => {
+      const apiError = error as { response?: { data?: { message?: string } } };
+      toast.error(apiError.response?.data?.message || 'Failed to record expense');
     }
   });
 

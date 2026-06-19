@@ -13,6 +13,14 @@ import { useDashboardAnalytics } from '@/features/dashboard/hooks/useDashboard';
 import { AddSaleDialog } from '@/features/dashboard/components/AddSaleDialog';
 import { AddExpenseDialog } from '@/features/dashboard/components/AddExpenseDialog';
 
+import { DashboardAnalyticsData } from '@/features/dashboard/components/DashboardKPIs';
+import { ExpenseBreakdownData } from '@/features/dashboard/components/ExpenseBreakdownChart';
+
+type FullAnalyticsData = DashboardAnalyticsData & ExpenseBreakdownData & {
+  memberGrowth?: { date: string; count: number }[];
+  revenueTrend?: { date: string; amount: number }[];
+};
+
 export default function DashboardPage() {
   const { currentUser } = useAuth();
   const { dateRange, setDateRange } = useDateRange();
@@ -21,7 +29,7 @@ export default function DashboardPage() {
   const endDateStr = dateRange?.to ? format(dateRange.to, 'yyyy-MM-dd') : undefined;
 
   const { data: analyticsData, isLoading } = useDashboardAnalytics(startDateStr, endDateStr);
-  const analytics = analyticsData;
+  const analytics = (analyticsData as FullAnalyticsData) || null;
 
   if (!currentUser) return null;
 

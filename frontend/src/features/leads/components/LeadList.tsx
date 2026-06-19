@@ -2,18 +2,15 @@
 
 import { useState } from 'react';
 import { useLeads } from '../hooks/useLeads';
-import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { Search, Target, Download, MoreHorizontal, Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { WhatsAppButton } from './WhatsAppButton';
-import { EmailButton } from './EmailButton';
 import { LeadAvatar } from './LeadAvatar';
 import { LeadStatusBadge } from './LeadStatusBadge';
 import { CopyButton } from '@/components/ui/copy-button';
-import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { DeleteLeadDialog } from './DeleteLeadDialog';
 import {
@@ -36,7 +33,6 @@ import {
 export function LeadList() {
   const { data, isLoading, isError } = useLeads();
   const { currentUser } = useAuth();
-  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
 

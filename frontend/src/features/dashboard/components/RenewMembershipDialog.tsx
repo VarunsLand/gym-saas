@@ -28,13 +28,13 @@ type RenewFormValues = z.infer<typeof renewSchema>;
 interface RenewMembershipDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  member: any; // Using any for simplicity here, maps to Lead
+  member: { id: string; first_name: string; last_name?: string | null; service?: string | null; expiry_date?: string | null; } | null;
 }
 
 export function RenewMembershipDialog({ open, onOpenChange, member }: RenewMembershipDialogProps) {
   const { mutate: renewMember, isPending } = useRenewLead();
 
-  const { register, handleSubmit, control, formState: { errors }, reset } = useForm<RenewFormValues>({
+  const { register, handleSubmit, control, formState: { errors }, reset } = useForm({
     resolver: zodResolver(renewSchema),
     defaultValues: {
       duration_months: 1,

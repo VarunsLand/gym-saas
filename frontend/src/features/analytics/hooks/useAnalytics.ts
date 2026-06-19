@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMemberGrowthAnalytics, AnalyticsResponse } from '../services/analyticsService';
+import { getMemberGrowthAnalytics } from '../services/analyticsService';
 
 interface UseMemberGrowthParams {
   startDate?: string;

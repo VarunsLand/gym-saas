@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-export function MemberGrowthChart({ data }: { data: any[] }) {
+export function MemberGrowthChart({ data }: { data: { date: string; count: number }[] }) {
   if (!data || data.length === 0) {
     return (
       <Card className="glass-card h-full rounded-3xl overflow-hidden flex flex-col border border-white/5 relative group">

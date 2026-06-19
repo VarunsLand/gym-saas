@@ -2,8 +2,7 @@
 
 import { useLeads } from '@/features/leads/hooks/useLeads';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Clock, ChevronRight, AlertTriangle } from 'lucide-react';
+import { Clock, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import { differenceInDays } from 'date-fns';
 import { LeadAvatar } from '@/features/leads/components/LeadAvatar';
@@ -58,15 +57,24 @@ export function ExpiringSoonWidget() {
   // Calculate expiry dates for all leads and filter
   const today = new Date();
   
+  interface ExpiryLead {
+    id: string;
+    first_name: string;
+    last_name?: string | null;
+    expiry_date?: string | null;
+    service?: string | null;
+    daysUntilExpiry?: number;
+  }
+
   const expiringLeads = leads
-    .filter((lead: any) => lead.expiry_date)
-    .map((lead: any) => {
-      const expiryDate = new Date(lead.expiry_date);
+    .filter((lead: ExpiryLead) => lead.expiry_date)
+    .map((lead: ExpiryLead) => {
+      const expiryDate = new Date(lead.expiry_date!);
       const daysUntilExpiry = differenceInDays(expiryDate, today);
       return { ...lead, expiryDate, daysUntilExpiry };
     })
-    .filter((lead: any) => lead.daysUntilExpiry >= 0 && lead.daysUntilExpiry <= 30)
-    .sort((a: any, b: any) => a.daysUntilExpiry - b.daysUntilExpiry)
+    .filter((lead: ExpiryLead) => lead.daysUntilExpiry !== undefined && lead.daysUntilExpiry >= 0 && lead.daysUntilExpiry <= 30)
+    .sort((a: ExpiryLead, b: ExpiryLead) => (a.daysUntilExpiry || 0) - (b.daysUntilExpiry || 0))
     .slice(0, 5);
 
   return (
@@ -91,8 +99,8 @@ export function ExpiringSoonWidget() {
           </div>
         ) : (
           <div className="flex flex-col divide-y divide-slate-100 dark:divide-slate-800/60">
-            {expiringLeads.map((lead: any) => {
-              const isUrgent = lead.daysUntilExpiry <= 7;
+            {expiringLeads.map((lead: ExpiryLead) => {
+              const isUrgent = (lead.daysUntilExpiry || 0) <= 7;
               
               return (
                 <Link 

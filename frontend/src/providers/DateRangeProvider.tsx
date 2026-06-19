@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState } from 'react';
-import { addDays, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns';
+import { startOfMonth, endOfMonth } from 'date-fns';
 
 type DateRange = {
   from: Date | undefined;

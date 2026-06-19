@@ -24,7 +24,7 @@ export function AddSaleDialog() {
   const leads = leadsData?.data?.leads || [];
 
   const mutation = useMutation({
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: { lead_id: string; amount: number; type: string; date: string }) => {
       const response = await api.post('/sales', data);
       return response.data;
     },
@@ -35,8 +35,9 @@ export function AddSaleDialog() {
       // Reset form
       setLeadId(''); setAmount(''); setType('MEMBERSHIP_PURCHASE'); setDate(new Date().toISOString().split('T')[0]);
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to record sale');
+    onError: (error: unknown) => {
+      const apiError = error as { response?: { data?: { message?: string } } };
+      toast.error(apiError.response?.data?.message || 'Failed to record sale');
     }
   });
 
@@ -70,9 +71,9 @@ export function AddSaleDialog() {
                 <SelectValue placeholder="Select member" />
               </SelectTrigger>
               <SelectContent>
-                {leads.map((lead: any) => (
+                {leads.map((lead: { id: string; first_name: string; last_name?: string | null }) => (
                   <SelectItem key={lead.id} value={lead.id}>
-                    {lead.first_name} {lead.last_name}
+                    {lead.first_name} {lead.last_name || ''}
                   </SelectItem>
                 ))}
               </SelectContent>

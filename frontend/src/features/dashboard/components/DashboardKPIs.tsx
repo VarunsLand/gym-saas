@@ -35,7 +35,18 @@ const CardWaveDecoration = () => (
   </div>
 );
 
-export function DashboardKPIs({ analytics, isLoading }: { analytics: any, isLoading: boolean }) {
+export interface DashboardAnalyticsData {
+  activeMembers: number;
+  newMembers: number;
+  revenue: number;
+  profit: number;
+  trends?: {
+    membersPercentage?: number;
+    revenuePercentage?: number;
+  };
+}
+
+export function DashboardKPIs({ analytics, isLoading }: { analytics: DashboardAnalyticsData, isLoading: boolean }) {
   if (isLoading || !analytics) {
     return (
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

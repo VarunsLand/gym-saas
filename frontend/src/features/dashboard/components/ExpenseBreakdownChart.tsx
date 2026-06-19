@@ -6,7 +6,11 @@ import { AddExpenseDialog } from '@/features/dashboard/components/AddExpenseDial
 
 const COLORS = ['#3b82f6', '#8b5cf6', '#22d3ee', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#64748b'];
 
-export function ExpenseBreakdownChart({ analytics }: { analytics: any }) {
+export interface ExpenseBreakdownData {
+  expensesByCategory?: { category: string; amount: number }[];
+}
+
+export function ExpenseBreakdownChart({ analytics }: { analytics: ExpenseBreakdownData }) {
   const data = analytics?.expensesByCategory || [];
 
   if (!data || data.length === 0) {
@@ -51,12 +55,12 @@ export function ExpenseBreakdownChart({ analytics }: { analytics: any }) {
                 stroke="rgba(0,0,0,0.2)"
                 animationDuration={1500}
               >
-                {data.map((entry: any, index: number) => (
+                {data.map((entry: { category: string; amount: number }, index: number) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value: number) => [`₹${value.toLocaleString('en-IN')}`, 'Amount']}
+                formatter={(value: unknown) => [`₹${Number(value).toLocaleString('en-IN')}`, 'Amount']}
                 contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)' }}
                 itemStyle={{ color: '#e2e8f0', fontWeight: 600 }}
               />
@@ -66,7 +70,7 @@ export function ExpenseBreakdownChart({ analytics }: { analytics: any }) {
         
         {/* Legend */}
         <div className="flex flex-wrap gap-2 mt-4 justify-center">
-          {data.map((entry: any, index: number) => (
+          {data.map((entry: { category: string; amount: number }, index: number) => (
             <div key={entry.category} className="flex items-center gap-1.5 text-xs bg-white/5 px-2 py-1 rounded-md border border-white/5">
               <span className="w-2 h-2 rounded-full shadow-sm" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
               <span className="text-slate-300 font-medium">{entry.category.replace('_', ' ')}</span>

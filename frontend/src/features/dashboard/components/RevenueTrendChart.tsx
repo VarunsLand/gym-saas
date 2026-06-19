@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { AddSaleDialog } from '@/features/dashboard/components/AddSaleDialog';
 
-export function RevenueTrendChart({ data }: { data: any[] }) {
+export function RevenueTrendChart({ data }: { data: { date: string; amount: number }[] }) {
   if (!data || data.length === 0) {
     return (
       <Card className="glass-card h-full rounded-3xl overflow-hidden flex flex-col border border-white/5 relative group">
@@ -57,7 +57,7 @@ export function RevenueTrendChart({ data }: { data: any[] }) {
                 tickFormatter={(value) => `₹${value.toLocaleString('en-IN')}`}
               />
               <Tooltip
-                formatter={(value: number) => [`₹${value.toLocaleString('en-IN')}`, 'Revenue']}
+                formatter={(value: unknown) => [`₹${Number(value).toLocaleString('en-IN')}`, 'Revenue']}
                 contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)' }}
                 itemStyle={{ color: '#e2e8f0', fontWeight: 600 }}
                 labelStyle={{ color: '#94a3b8', marginBottom: '4px' }}
