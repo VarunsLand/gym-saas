@@ -10,6 +10,9 @@ const ApiError = require('./utils/ApiError');
 
 const app = express();
 
+// Trust Render proxy
+app.set('trust proxy', 1);
+
 // 1. Set security HTTP headers
 app.use(helmet());
 
@@ -28,12 +31,16 @@ app.options('*', cors(corsOptions));
 
 // 3. Rate limiting for authentication endpoints
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20, // Limit each IP to 20 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 20,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: 'TooManyRequests', message: 'Too many requests from this IP, please try again after 15 minutes' }
+  message: {
+    error: 'TooManyRequests',
+    message: 'Too many requests from this IP, please try again after 15 minutes'
+  }
 });
+
 app.use('/api/v1/auth/login', authLimiter);
 app.use('/api/v1/auth/signup', authLimiter);
 
@@ -42,7 +49,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-// 5. Body parsers (read JSON payload and URL encoded data into req.body)
+// 5. Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -54,12 +61,12 @@ app.get('/health', (req, res) => {
 // 7. Mount application routing map
 app.use('/api/v1', routes);
 
-// 8. Handle Unmatched Routes (404 Fallback)
+// 8. Handle Unmatched Routes
 app.all('*', (req, res, next) => {
   next(new ApiError(404, `Route not found: ${req.method} ${req.originalUrl}`));
 });
 
-// 9. Global Error Handling Middleware (Must be the last middleware in the stack)
+// 9. Global Error Handling Middleware
 app.use(globalErrorHandler);
 
 module.exports = app;
