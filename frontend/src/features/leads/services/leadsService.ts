@@ -35,5 +35,10 @@ export const leadsService = {
   async deleteLead(id: string): Promise<{ status: string; message: string }> {
     const response = await api.delete(`/leads/${id}`);
     return response.data;
+  },
+
+  async renewLead(id: string, data: { duration_months: number; amount: number; payment_method: string }): Promise<LeadResponse> {
+    const response = await api.post(`/leads/${id}/renew`, data);
+    return response.data;
   }
 };

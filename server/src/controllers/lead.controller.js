@@ -103,11 +103,29 @@ const deleteLead = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * @desc    Renew an existing member
+ * @route   POST /api/v1/leads/:id/renew
+ * @access  Private
+ */
+const renewLead = catchAsync(async (req, res) => {
+  const tenantId = req.user.tenant_id;
+  const leadId = req.params.id;
+
+  const lead = await LeadService.renewLead(tenantId, leadId, req.body);
+
+  res.status(200).json({
+    status: 'success',
+    data: { lead }
+  });
+});
+
 module.exports = {
   getLeads,
   getLeadById,
   createLead,
   updateLead,
   importLeads,
-  deleteLead
+  deleteLead,
+  renewLead
 };

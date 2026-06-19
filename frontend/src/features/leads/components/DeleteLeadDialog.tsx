@@ -56,26 +56,27 @@ export function DeleteLeadDialog({ leadId, triggerContext = 'icon', redirectOnSu
             <Button variant="destructive" className="gap-2 w-full sm:w-auto">
               <Trash2 className="w-4 h-4" />
               Delete Lead
+              Delete Member
             </Button>
           )
         }
       />
       <AlertDialogContent onClick={(e) => e.stopPropagation()}>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure you want to delete this lead?</AlertDialogTitle>
+          <AlertDialogTitle>Are you sure you want to delete this member?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. The lead will be removed from the CRM and hidden from all users.
+            This action cannot be undone. This will permanently delete the member
+            and all associated data from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-          <AlertDialogAction
+          <AlertDialogAction 
             onClick={handleDelete}
             disabled={isPending}
             className="bg-red-600 hover:bg-red-700 text-white"
           >
-            {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            Delete
+            {isPending ? 'Deleting...' : 'Delete Member'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

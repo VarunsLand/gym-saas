@@ -24,10 +24,10 @@ export default function LeadDetailError({
             <AlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
           </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Error Loading Lead</h2>
-          <p className="text-muted-foreground mt-2 text-sm">
-            Failed to load this lead&apos;s details. The lead may have been deleted or you may not have permission.
+        <div className="mt-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Error Loading Member</h2>
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            Failed to load this member&apos;s details. The member may have been deleted or you may not have permission.
           </p>
           {process.env.NODE_ENV === 'development' && (
             <p className="text-xs text-red-500 mt-2 font-mono break-all">
@@ -43,7 +43,7 @@ export default function LeadDetailError({
           <Link href="/leads">
             <Button>
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Leads
+              Back to Members
             </Button>
           </Link>
         </div>

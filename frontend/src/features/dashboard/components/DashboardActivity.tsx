@@ -60,7 +60,7 @@ export function DashboardActivity() {
             </div>
             <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">No recent activity</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
-              When you interact with leads or their statuses change, the activity will appear here.
+              When you interact with members or their memberships change, the activity will appear here.
             </p>
           </div>
         ) : (

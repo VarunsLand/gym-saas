@@ -1,18 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { dashboardService } from '../services/dashboardService';
 
-export const useDashboardMetrics = () => {
+export const useDashboardAnalytics = (startDate?: string, endDate?: string) => {
   return useQuery({
-    queryKey: ['dashboardMetrics'],
-    queryFn: () => dashboardService.getMetrics(),
+    queryKey: ['dashboardAnalytics', startDate, endDate],
+    queryFn: () => dashboardService.getAnalytics(startDate, endDate),
     staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-};
-
-export const useDashboardActivity = (limit: number = 15) => {
-  return useQuery({
-    queryKey: ['dashboardActivity', limit],
-    queryFn: () => dashboardService.getActivity(limit),
-    staleTime: 2 * 60 * 1000, // 2 minutes
   });
 };

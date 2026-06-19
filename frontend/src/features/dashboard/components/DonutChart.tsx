@@ -21,18 +21,18 @@ export function DonutChart({ segments, title, className }: DonutChartProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const total = segments.reduce((sum, s) => sum + s.value, 0);
   
-  if (total === 0) {
-    return (
-      <Card className={cn("bg-gradient-to-b from-white to-slate-50/50", className)}>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base font-semibold text-slate-800">{title}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex items-center justify-center h-64">
-          <p className="text-sm text-slate-400">No lead data available</p>
-        </CardContent>
-      </Card>
-    );
-  }
+    if (total === 0) {
+      return (
+        <div className={cn("flex flex-col h-full", className)}>
+          <div className="pb-2">
+            <h3 className="text-base font-semibold text-slate-100">{title}</h3>
+          </div>
+          <div className="flex items-center justify-center h-64">
+            <p className="text-sm text-slate-400">No lead data available</p>
+          </div>
+        </div>
+      );
+    }
 
   // SVG donut chart parameters
   const size = 180;
@@ -54,11 +54,11 @@ export function DonutChart({ segments, title, className }: DonutChartProps) {
   const hoveredSegment = hoveredIndex !== null ? segments[hoveredIndex] : null;
 
   return (
-    <Card className={cn("bg-gradient-to-b from-white to-slate-50/50", className)}>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-base font-semibold text-slate-800">{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className={cn("flex flex-col h-full", className)}>
+      <div className="pb-4">
+        <h3 className="text-base font-semibold text-slate-100">{title}</h3>
+      </div>
+      <div>
         <div className="flex flex-col sm:flex-row items-center gap-6">
           {/* Donut Chart */}
           <div className="relative shrink-0">
@@ -75,7 +75,7 @@ export function DonutChart({ segments, title, className }: DonutChartProps) {
                 r={radius}
                 fill="none"
                 stroke="currentColor"
-                className="text-slate-100"
+                className="text-slate-800"
                 strokeWidth={strokeWidth}
               />
               {/* Data segments */}
@@ -99,7 +99,7 @@ export function DonutChart({ segments, title, className }: DonutChartProps) {
             </svg>
             {/* Center label */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-bold text-slate-900 tabular-nums">
+              <span className="text-2xl font-bold text-slate-100 tabular-nums">
                 {hoveredSegment ? hoveredSegment.value : total}
               </span>
               <span className="text-xs text-slate-400 font-medium">
@@ -108,7 +108,6 @@ export function DonutChart({ segments, title, className }: DonutChartProps) {
             </div>
           </div>
 
-          {/* Legend */}
           <div className="flex-1 space-y-3 w-full">
             {segments.map((segment, i) => {
               const percent = total > 0 ? ((segment.value / total) * 100).toFixed(1) : '0.0';
@@ -116,10 +115,10 @@ export function DonutChart({ segments, title, className }: DonutChartProps) {
                 <div
                   key={segment.label}
                   className={cn(
-                    "flex items-center justify-between py-2 px-3 rounded-xl transition-all cursor-pointer",
+                    "flex items-center justify-between py-2 px-3 rounded-xl transition-all cursor-pointer border border-transparent",
                     hoveredIndex === i
-                      ? "bg-slate-100 scale-[1.02]"
-                      : "hover:bg-slate-50"
+                      ? "bg-slate-800/50 border-slate-700 scale-[1.02]"
+                      : "hover:bg-slate-800/30"
                   )}
                   onMouseEnter={() => setHoveredIndex(i)}
                   onMouseLeave={() => setHoveredIndex(null)}
@@ -127,20 +126,20 @@ export function DonutChart({ segments, title, className }: DonutChartProps) {
                   <div className="flex items-center gap-2.5">
                     <div
                       className="w-3 h-3 rounded-full shadow-sm"
-                      style={{ backgroundColor: segment.color }}
+                      style={{ backgroundColor: segment.color, boxShadow: `0 0 10px ${segment.color}80` }}
                     />
-                    <span className="text-sm font-medium text-slate-700">{segment.label}</span>
+                    <span className="text-sm font-medium text-slate-300">{segment.label}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-semibold text-slate-900 tabular-nums">{segment.value}</span>
-                    <span className="text-xs text-slate-400 tabular-nums w-12 text-right">{percent}%</span>
+                    <span className="text-sm font-semibold text-slate-100 tabular-nums">{segment.value}</span>
+                    <span className="text-xs text-slate-500 tabular-nums w-12 text-right">{percent}%</span>
                   </div>
                 </div>
               );
             })}
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

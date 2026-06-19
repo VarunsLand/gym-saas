@@ -62,7 +62,7 @@ export function LeadList() {
   if (isError) {
     return (
       <div className="p-4 border-l-4 border-red-500 bg-red-50 dark:bg-red-900/10 text-red-700 dark:text-red-400">
-        <p>Failed to load leads. Please try again later.</p>
+        <p>Failed to load members. Please try again later.</p>
       </div>
     );
   }
@@ -79,11 +79,11 @@ export function LeadList() {
   };
 
   const filters = [
-    { id: 'ALL', label: 'All' },
+    { id: 'ALL', label: 'All Members' },
     { id: 'NEW', label: 'New' },
-    { id: 'IN_PROGRESS', label: 'In Progress' },
-    { id: 'WON', label: 'Won' },
-    { id: 'LOST', label: 'Lost' },
+    { id: 'IN_PROGRESS', label: 'Expiring Soon' },
+    { id: 'WON', label: 'Active' },
+    { id: 'LOST', label: 'Expired' },
   ];
 
   // Combined Search and Status Filter
@@ -120,13 +120,13 @@ export function LeadList() {
     const link = document.createElement('a');
     link.setAttribute('href', url);
     const dateStr = new Date().toISOString().split('T')[0];
-    link.setAttribute('download', `leads-export-${dateStr}.csv`);
+    link.setAttribute('download', `members-export-${dateStr}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    toast.success(`Exported ${filteredLeads.length} leads successfully`);
+    toast.success(`Exported ${filteredLeads.length} members successfully`);
   };
 
   return (
@@ -165,7 +165,7 @@ export function LeadList() {
             <div className="relative w-full md:w-[350px] shrink-0">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <Input
-                placeholder="Search leads by name, email, or phone..."
+                placeholder="Search members by name, email, or phone..."
                 className="pl-9 h-9 w-full bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-indigo-500 rounded-full text-ellipsis"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -189,9 +189,9 @@ export function LeadList() {
             <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800/80 rounded-full flex items-center justify-center mb-4">
               <Target className="w-8 h-8 text-slate-400" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">No leads found</h3>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">No members found</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
-              {leads.length === 0 ? 'Get started by creating your first lead.' : 'Try adjusting your search criteria.'}
+              {leads.length === 0 ? 'Your gym is ready. Add your first member and start tracking memberships.' : 'Try adjusting your search criteria.'}
             </p>
           </div>
         ) : (
@@ -199,10 +199,12 @@ export function LeadList() {
             <Table>
               <TableHeader className="bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-10 border-b border-slate-100 dark:border-slate-800">
                 <TableRow className="hover:bg-transparent border-none">
-                  <TableHead className="font-medium">Name</TableHead>
-                  <TableHead className="font-medium">Contact Info</TableHead>
+                  <TableHead className="font-medium">Member Name</TableHead>
+                  <TableHead className="font-medium">Phone</TableHead>
+                  <TableHead className="font-medium">Plan</TableHead>
+                  <TableHead className="font-medium">Joining Date</TableHead>
+                  <TableHead className="font-medium">Expiry Date</TableHead>
                   <TableHead className="font-medium">Status</TableHead>
-                  <TableHead className="font-medium">Created</TableHead>
                   <TableHead className="w-[50px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -222,16 +224,7 @@ export function LeadList() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm">{lead.email || '—'}</span>
-                        {lead.email && (
-                          <>
-                            <CopyButton text={lead.email} className="w-5 h-5" />
-                            <EmailButton email={lead.email} className="w-5 h-5 min-h-0 min-w-0" />
-                          </>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs text-muted-foreground">{lead.phone_number}</span>
+                        <span className="text-sm">{lead.phone_number || '—'}</span>
                         {lead.phone_number && (
                           <>
                             <CopyButton text={lead.phone_number} className="w-5 h-5" />
@@ -241,10 +234,24 @@ export function LeadList() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <LeadStatusBadge status={lead.status} />
+                      <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        {lead.service || 'Basic Plan'}
+                      </span>
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}
+                      {new Date(lead.created_at).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {(() => {
+                        const date = new Date(lead.created_at);
+                        if (lead.service === 'Elite Plan') date.setFullYear(date.getFullYear() + 1);
+                        else if (lead.service === 'Pro Plan') date.setMonth(date.getMonth() + 6);
+                        else date.setMonth(date.getMonth() + 1);
+                        return date.toLocaleDateString();
+                      })()}
+                    </TableCell>
+                    <TableCell>
+                      <LeadStatusBadge status={lead.status} />
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>

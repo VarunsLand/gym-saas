@@ -4,6 +4,18 @@ import { useDashboardMetrics } from '../hooks/useDashboard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Target, Frown, CalendarCheck, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useCountUp } from '@/hooks/useCountUp';
+
+function AnimatedMetric({ value }: { value: number | string }) {
+  const isCurrency = typeof value === 'string' && value.startsWith('$');
+  const numValue = typeof value === 'string' ? parseFloat(value.replace(/[^0-9.-]+/g,"")) : value;
+  const count = useCountUp(numValue || 0, 1500);
+
+  if (isCurrency) {
+    return <>${count}</>;
+  }
+  return <>{count}</>;
+}
 
 export function DashboardMetrics() {
   const { data, isLoading, isError, refetch, isRefetching } = useDashboardMetrics();
@@ -12,7 +24,7 @@ export function DashboardMetrics() {
     return (
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {[1, 2, 3, 4].map((i) => (
-          <Card key={i} className="bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl">
+          <Card key={i} className="glass-card rounded-2xl">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div className="h-4 w-24 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
               <div className="h-10 w-10 bg-slate-100 dark:bg-slate-800 rounded-xl animate-pulse" />
@@ -48,29 +60,29 @@ export function DashboardMetrics() {
 
   const items = [
     {
-      title: 'Total Leads',
+      title: 'Total Members',
       value: metrics.total_leads,
       icon: Users,
       color: 'text-blue-600 dark:text-blue-400',
       bgColor: 'bg-blue-100 dark:bg-blue-900/30',
     },
     {
-      title: 'Leads Won',
+      title: 'Active Memberships',
       value: metrics.leads_won,
       icon: Target,
       color: 'text-emerald-600 dark:text-emerald-400',
       bgColor: 'bg-emerald-100 dark:bg-emerald-900/30',
     },
     {
-      title: 'Leads Lost',
+      title: 'Expiring This Month',
       value: metrics.leads_lost,
       icon: Frown,
       color: 'text-rose-600 dark:text-rose-400',
       bgColor: 'bg-rose-100 dark:bg-rose-900/30',
     },
     {
-      title: 'Tasks Due Today',
-      value: metrics.tasks_due_today,
+      title: 'Revenue This Month',
+      value: `$${(metrics.tasks_due_today || 0) * 100}`,
       icon: CalendarCheck,
       color: 'text-amber-600 dark:text-amber-400',
       bgColor: 'bg-amber-100 dark:bg-amber-900/30',
@@ -82,7 +94,7 @@ export function DashboardMetrics() {
       {items.map((item) => (
         <Card 
           key={item.title} 
-          className="bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-2xl relative overflow-hidden group cursor-pointer"
+          className="glass-card hover:neon-glow transition-all duration-300 hover:-translate-y-1 rounded-2xl relative overflow-hidden group cursor-pointer"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-950/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
@@ -94,7 +106,9 @@ export function DashboardMetrics() {
             </div>
           </CardHeader>
           <CardContent className="relative z-10">
-            <div className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100 mt-1">{item.value}</div>
+            <div className="text-4xl font-bold tracking-tight text-slate-100 mt-1">
+              <AnimatedMetric value={item.value} />
+            </div>
           </CardContent>
         </Card>
       ))}

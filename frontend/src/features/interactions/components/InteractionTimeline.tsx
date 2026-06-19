@@ -13,7 +13,7 @@ export function InteractionTimeline({ leadId }: { leadId: string }) {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle>Interactions</CardTitle>
+        <CardTitle>Activity Timeline</CardTitle>
         <CreateInteractionDialog leadId={leadId} />
       </CardHeader>
       <CardContent className="flex-1">
@@ -24,7 +24,7 @@ export function InteractionTimeline({ leadId }: { leadId: string }) {
         ) : isError ? (
           <div className="flex flex-col items-center justify-center h-32 space-y-2 text-red-500">
             <AlertCircle className="w-6 h-6" />
-            <p className="text-sm">Failed to load interactions.</p>
+            <p className="text-sm">Failed to load activity.</p>
             <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isRefetching}>
               Retry
             </Button>
@@ -34,8 +34,8 @@ export function InteractionTimeline({ leadId }: { leadId: string }) {
             <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-full mb-4">
               <MessageSquare className="w-8 h-8 text-slate-400" />
             </div>
-            <p className="font-medium text-slate-900 dark:text-slate-100">No interactions yet</p>
-            <p className="text-sm mt-1 mb-4">Log a call, email, or meeting to start the timeline.</p>
+            <p className="font-medium text-slate-900 dark:text-slate-100">No activity yet</p>
+            <p className="text-sm mt-1 mb-4">Activities like payments, attendance, and notes will appear here.</p>
           </div>
         ) : (
           <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent mt-4">

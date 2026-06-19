@@ -7,12 +7,9 @@ import {
   LayoutDashboard,
   Users,
   Settings,
-  Target,
+  UserCog,
   X,
-  Hexagon,
-  // BarChart3, // Future-proofing: Reports
-  // Puzzle, // Future-proofing: Integrations
-  // CreditCard, // Future-proofing: Billing
+  Activity,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -23,13 +20,10 @@ interface AppSidebarProps {
 
 const NAVIGATION_ITEMS = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Leads', href: '/leads', icon: Target },
-  { name: 'Users', href: '/users', icon: Users },
+  { name: 'Analytics', href: '/analytics', icon: Activity },
+  { name: 'Members', href: '/leads', icon: Users },
+  { name: 'Users', href: '/users', icon: UserCog },
   { name: 'Settings', href: '/settings', icon: Settings },
-  // Placeholders for future routes
-  // { name: 'Reports', href: '/reports', icon: BarChart3 },
-  // { name: 'Integrations', href: '/integrations', icon: Puzzle },
-  // { name: 'Billing', href: '/billing', icon: CreditCard },
 ];
 
 export function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
@@ -55,9 +49,9 @@ export function AppSidebar({ isOpen, onClose }: AppSidebarProps) {
         <div className="flex h-16 shrink-0 items-center justify-between px-6 border-b border-slate-800">
           <Link href="/" className="flex items-center gap-3 font-bold text-xl tracking-tight text-white transition-opacity hover:opacity-80" onClick={onClose}>
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
-              <Hexagon className="text-white w-5 h-5" fill="currentColor" />
+              <Activity className="text-white w-5 h-5" />
             </div>
-            SaaS CRM
+            Gym SaaS
           </Link>
           <Button variant="ghost" size="icon" className="lg:hidden text-slate-400 hover:text-white hover:bg-slate-800" onClick={onClose}>
             <X className="h-5 w-5" />

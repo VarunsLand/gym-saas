@@ -192,7 +192,7 @@ export function ImportLeadsDialog() {
     const validRows = parsedData.filter(r => r.isValid);
     if (validRows.length === 0) return;
     if (validRows.length > 1000) {
-      alert('Maximum 1000 leads can be imported at once.');
+      alert('Maximum 1000 members can be imported at once.');
       return;
     }
 
@@ -353,7 +353,7 @@ export function ImportLeadsDialog() {
               <Button variant="outline" onClick={resetState}>Cancel</Button>
               <Button onClick={handleImport} disabled={validCount === 0 || isPending}>
                 {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                Import {validCount} Leads
+                Import {validCount} Members
               </Button>
             </div>
           </div>

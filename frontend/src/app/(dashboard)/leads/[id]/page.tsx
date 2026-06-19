@@ -44,14 +44,16 @@ export default function LeadDetailsPage({ params }: { params: Promise<{ id: stri
 
   if (isError || !data?.data?.lead) {
     return (
-      <div className="p-4 md:p-8">
-        <div className="max-w-4xl mx-auto text-center py-12">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Lead Not Found</h2>
-          <p className="text-muted-foreground mt-2 mb-6">The lead you are looking for does not exist or you do not have permission to view it.</p>
-          <Link href="/leads">
-            <Button>Return to Leads</Button>
-          </Link>
-        </div>
+      <div className="p-4 md:p-8 flex flex-col items-center justify-center min-h-[50vh] text-center">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Member Not Found</h2>
+        <p className="mt-2 text-muted-foreground max-w-md">
+          The member you are looking for does not exist or you do not have permission to view it.
+        </p>
+        <Link href="/leads">
+          <Button variant="outline" className="mt-6">
+            Back to Members
+          </Button>
+        </Link>
       </div>
     );
   }
@@ -106,7 +108,7 @@ export default function LeadDetailsPage({ params }: { params: Promise<{ id: stri
             <Card>
               <CardHeader className="pb-4">
                 <CardTitle className="text-sm text-muted-foreground font-medium uppercase tracking-wider">
-                  Lead Status
+                  Member Status
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -121,6 +123,33 @@ export default function LeadDetailsPage({ params }: { params: Promise<{ id: stri
                     <SelectItem value="LOST">Lost</SelectItem>
                   </SelectContent>
                 </Select>
+              </CardContent>
+            </Card>
+
+            {/* Plan Info Card */}
+            <Card>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-sm text-muted-foreground font-medium uppercase tracking-wider">
+                  Membership Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Current Plan</span>
+                  <span className="text-sm font-medium">{lead.service || 'Basic Plan'}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Expiry Date</span>
+                  <span className="text-sm font-medium">
+                    {(() => {
+                      const date = new Date(lead.created_at);
+                      if (lead.service === 'Elite Plan') date.setFullYear(date.getFullYear() + 1);
+                      else if (lead.service === 'Pro Plan') date.setMonth(date.getMonth() + 6);
+                      else date.setMonth(date.getMonth() + 1);
+                      return date.toLocaleDateString();
+                    })()}
+                  </span>
+                </div>
               </CardContent>
             </Card>
 

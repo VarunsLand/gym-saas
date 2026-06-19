@@ -60,6 +60,16 @@ router.patch(
 );
 
 /**
+ * @route   POST /api/v1/leads/:id/renew
+ * @desc    Renew an existing member
+ * @access  Private
+ */
+router.post(
+  '/:id/renew',
+  leadController.renewLead
+);
+
+/**
  * @route   DELETE /api/v1/leads/:id
  * @desc    Soft delete an existing lead
  * @access  Private (Admin only)

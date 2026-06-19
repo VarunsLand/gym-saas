@@ -173,3 +173,23 @@ export const useDeleteLead = () => {
     },
   });
 };
+
+export const useRenewLead = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: { duration_months: number; amount: number; payment_method: string } }) => 
+      leadsService.renewLead(id, data),
+    onSuccess: (data, variables) => {
+      toast.success('Membership renewed successfully');
+      queryClient.invalidateQueries({ queryKey: ['leads'] });
+      queryClient.invalidateQueries({ queryKey: ['lead', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['dashboardMetrics'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboardActivity'] });
+    },
+    onError: (error: ApiError) => {
+      const message = error.response?.data?.message || 'Failed to renew membership';
+      toast.error(message);
+    },
+  });
+};

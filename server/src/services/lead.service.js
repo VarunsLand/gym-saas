@@ -180,6 +180,64 @@ class LeadService {
       data: { deleted_at: new Date() }
     });
   }
+  /**
+   * Renew a lead (member)
+   * @param {string} tenantId 
+   * @param {string} leadId 
+   * @param {Object} data - { duration_months, amount, payment_method }
+   */
+  static async renewLead(tenantId, leadId, data) {
+    const { duration_months, amount, payment_method = 'CASH' } = data;
+
+    const existingLead = await prisma.lead.findFirst({
+      where: {
+        id: leadId,
+        tenant_id: tenantId,
+        deleted_at: null
+      }
+    });
+
+    if (!existingLead) {
+      throw new ApiError(404, 'Member not found or access denied');
+    }
+
+    const today = new Date();
+    let baseDate = today;
+
+    if (existingLead.expiry_date && existingLead.expiry_date > today) {
+      baseDate = existingLead.expiry_date;
+    }
+
+    // Add months
+    const newExpiryDate = new Date(baseDate);
+    newExpiryDate.setMonth(newExpiryDate.getMonth() + parseInt(duration_months, 10));
+
+    // Execute in a transaction
+    return prisma.$transaction(async (tx) => {
+      // 1. Update the Lead
+      const updatedLead = await tx.lead.update({
+        where: { id: leadId },
+        data: {
+          expiry_date: newExpiryDate,
+          status: 'WON'
+        }
+      });
+
+      // 2. Create the Sale record
+      await tx.sale.create({
+        data: {
+          tenant_id: tenantId,
+          lead_id: leadId,
+          amount: parseFloat(amount),
+          type: 'MEMBERSHIP_RENEWAL',
+          payment_method,
+          date: new Date()
+        }
+      });
+
+      return updatedLead;
+    });
+  }
 }
 
 module.exports = LeadService;

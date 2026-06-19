@@ -8,10 +8,10 @@ import { Loader2 } from 'lucide-react';
 
 // Color palette matching the existing premium design system
 const STATUS_COLORS = {
-  NEW: { color: '#3B82F6', hover: '#2563EB' },         // Blue
-  IN_PROGRESS: { color: '#F59E0B', hover: '#D97706' }, // Amber
-  WON: { color: '#10B981', hover: '#059669' },         // Emerald
-  LOST: { color: '#F43F5E', hover: '#E11D48' },        // Rose
+  NEW: { color: '#8b5cf6', hover: '#7c3aed' },         // Violet
+  IN_PROGRESS: { color: '#f59e0b', hover: '#d97706' }, // Amber
+  WON: { color: '#22d3ee', hover: '#06b6d4' },         // Cyan
+  LOST: { color: '#ef4444', hover: '#dc2626' },        // Red
 };
 
 export function DashboardCharts() {

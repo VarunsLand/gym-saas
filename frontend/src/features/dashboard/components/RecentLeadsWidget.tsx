@@ -19,11 +19,11 @@ export function RecentLeadsWidget() {
 
   if (isLoading) {
     return (
-      <Card className="bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl h-full flex flex-col">
+      <Card className="glass-card rounded-2xl h-full flex flex-col">
         <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800/60">
           <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2">
             <Users className="w-4 h-4" />
-            Recent Leads
+            Recent Members
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0 flex-1">
@@ -43,18 +43,18 @@ export function RecentLeadsWidget() {
 
   if (isError) {
     return (
-      <Card className="bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl h-full flex flex-col">
+      <Card className="glass-card rounded-2xl h-full flex flex-col">
         <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800/60">
           <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2">
             <Users className="w-4 h-4" />
-            Recent Leads
+            Recent Members
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center flex-1 p-6 text-center space-y-3">
           <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center text-red-600">
             <Users className="w-6 h-6" />
           </div>
-          <p className="text-sm text-slate-600 dark:text-slate-400">Failed to load recent leads</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400">Failed to load recent members</p>
         </CardContent>
       </Card>
     );
@@ -64,11 +64,11 @@ export function RecentLeadsWidget() {
   const recentLeads = leads.slice(0, 5);
 
   return (
-    <Card className="bg-white dark:bg-slate-950 border-slate-200/60 dark:border-slate-800/60 shadow-sm rounded-2xl h-full flex flex-col overflow-hidden">
+    <Card className="glass-card rounded-2xl h-full flex flex-col overflow-hidden">
       <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800/60 flex flex-row items-center justify-between">
         <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2">
           <Users className="w-4 h-4" />
-          Recent Leads
+          Recent Members
         </CardTitle>
         <Link href="/leads" className="text-xs font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 flex items-center hover:underline">
           View all <ChevronRight className="w-3 h-3 ml-0.5" />
@@ -81,13 +81,13 @@ export function RecentLeadsWidget() {
             <div className="w-16 h-16 rounded-2xl bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-400 dark:text-slate-500 mb-4 shadow-sm border border-slate-100 dark:border-slate-800">
               <Inbox className="w-8 h-8" strokeWidth={1.5} />
             </div>
-            <h3 className="text-slate-900 dark:text-slate-100 font-semibold mb-1">No Leads Yet</h3>
+            <h3 className="text-slate-900 dark:text-slate-100 font-semibold mb-1">No Members Yet</h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 max-w-[200px] mb-6">
-              Start building your pipeline by creating your first lead.
+              Add your first member to start tracking memberships.
             </p>
             <Link href="/leads">
               <Button size="sm" className="rounded-full shadow-sm active:scale-[0.98] transition-transform">
-                Go to Leads
+                Add Member
               </Button>
             </Link>
           </div>
