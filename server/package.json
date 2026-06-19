@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "postinstall": "node node_modules/prisma/build/index.js generate",
-    "build": "npx prisma generate",
+    "build": "npx prisma generate && npx prisma db push",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "prisma:generate": "npx prisma generate",
