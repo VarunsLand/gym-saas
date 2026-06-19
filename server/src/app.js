@@ -58,6 +58,29 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+// TEMPORARY: Debug endpoint to verify database connection on Render
+// DELETE THIS AFTER CONFIRMING SIGNUP WORKS
+app.get('/debug/db-check', async (req, res) => {
+  try {
+    const prisma = require('./config/db');
+    const url = new URL(process.env.DATABASE_URL);
+    const tables = await prisma.$queryRawUnsafe(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name"
+    );
+    res.json({
+      host: url.hostname,
+      database: url.pathname.slice(1),
+      has_pooler: url.hostname.includes('-pooler'),
+      table_count: tables.length,
+      tables: tables.map(t => t.table_name),
+      has_users: tables.some(t => t.table_name === 'users'),
+      has_tenants: tables.some(t => t.table_name === 'tenants')
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 7. Mount application routing map
 app.use('/api/v1', routes);
 

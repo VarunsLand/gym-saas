@@ -5,3 +5,6 @@ node_modules/
 .prisma/
 *.log
 dist/
+diagnose.js
+check-tables.js
+*.backup
